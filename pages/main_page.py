@@ -3,6 +3,11 @@ from selenium.webdriver.common.by import By
 
 
 class MainPage(BasePage):
-    def go_to_login_page(self, browser):
+    def go_to_login_page(self):
         login_link = self.browser.find_element(By.CSS_SELECTOR, "#login_link")
         login_link.click()
+
+    def login_link_exists(self):
+        assert self.is_element_present(
+            By.CSS_SELECTOR, "#login_link"
+            ), "Login link doesn't exist"
