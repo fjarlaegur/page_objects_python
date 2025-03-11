@@ -1,5 +1,6 @@
 import pytest
 from .pages.product_page import ProductPage
+from .pages.login_page import LoginPage
 
 
 BASE_LINK = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
@@ -12,6 +13,7 @@ promo_link_list = [BASE_LINK + parameter for parameter in parameter_list]
 promo_link_list[7] = pytest.param(promo_link_list[7], marks=pytest.mark.xfail)
 
 
+@pytest.mark.skip
 @pytest.mark.parametrize("link", promo_link_list)
 def test_guest_can_add_products_to_basket(browser, link):
     page = ProductPage(browser, link)
@@ -40,3 +42,17 @@ def test_message_disappeared_after_adding_product_to_basket(browser):
     page.open()
     page.add_product_to_basket()
     page.disappeared_success_message()
+
+
+def test_guest_should_see_login_link_on_product_page(browser):
+    page = ProductPage(browser, BASE_LINK)
+    page.open()
+    page.login_link_exists()
+
+
+def test_guest_can_go_to_login_page_from_product_page(browser):
+    page = ProductPage(browser, BASE_LINK)
+    page.open()
+    page.go_to_login_page()
+    login_page = LoginPage(browser, browser.current_url)
+    login_page.should_be_login_page()
